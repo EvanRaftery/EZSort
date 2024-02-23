@@ -62,7 +62,7 @@ class Main {
     this.video.setAttribute('playsinline', '');
 
     // Add video element to DOM
-    document.body.appendChild(this.video);
+    //document.body.appendChild(this.video);
 
     // Create training buttons and info texts
     for (let i = 0; i < NUM_CLASSES; i++) {
@@ -71,9 +71,9 @@ class Main {
       div.style.marginBottom = '10px';
 
       // Create training button
-      const button = document.createElement('button')
-      button.innerText = "Train " + i;
-      div.appendChild(button);
+      //const button = document.createElement('button')
+      //button.innerText = "Train " + i;
+      //div.appendChild(button);
 
       // Listen for mouse events when clicking the button
       //button.addEventListener('mousedown', () => this.training = i);
@@ -85,7 +85,7 @@ class Main {
       
       // Create info text
       const infoText = document.createElement('span')
-      infoText.innerText = " No examples added";
+      infoText.innerText = "No examples added";
       div.appendChild(infoText);
       this.infoTexts.push(infoText);
     }
@@ -106,7 +106,7 @@ class Main {
   async bindPage() {
     this.knn = knnClassifier.create();
     this.mobilenet = await mobilenetModule.load();
-
+    
     this.start();
   }
 
@@ -141,17 +141,18 @@ class Main {
       }
 
       const numClasses = this.knn.getNumClasses();
+
+      // Only run KNN classifier if we have added samples to the model
       if (numClasses > 0) {
-
-        // If classes have been added, run prediction
-        logits = infer();
-        const res = await this.knn.predictClass(logits, TOPK);
-
         // Initialize variables for object detection
         let max = 0;
         let maxClass = "None";
-        for (let i = 0; i < NUM_CLASSES; i++) {
 
+        // Run prediction
+        logits = infer();
+        const res = await this.knn.predictClass(logits, TOPK);
+
+        for (let i = 0; i < NUM_CLASSES; i++) {
           // The number of examples for each class
           const exampleCount = this.knn.getClassExampleCount();
 
@@ -175,16 +176,16 @@ class Main {
         }
 
         // Make note of each prediction and how long that predicted class has been predicted for
-        if (maxClass == prevClass) {
+        if (maxClass == prevClass) {    // Same class we've been looking at
           maxCount = maxCount + 1;
-        } else {
+        } else {                        // New item detected!
           maxCount = 1;
           prevClass = maxClass;
         }
         console.log(maxClass, maxCount);    // This console log can be accessed by main.py for motor control
       }
 
-      // Dispose image when done
+      // Dispose image when done (saves resources)
       image.dispose();
       if (logits != null) {
         logits.dispose();

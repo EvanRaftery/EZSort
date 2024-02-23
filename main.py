@@ -59,7 +59,9 @@ def main():
         if logs is not None and len(logs) > 0:
             print(logs[-1])
 
+# Defines the training mode for the model
 def train(duration):
+    # Automatically take photos for each class, in order (duration = samples per class)
     for classNum in range(NUM_CLASSES):
         key = str(classNum)
         for i in range(duration):
