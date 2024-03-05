@@ -37,7 +37,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 import RPi.GPIO as GPIO
-from gpiozero import LED
+from gpiozero import LED, Button
 import time
 
 # Set up Flask
@@ -45,22 +45,22 @@ app = Flask(__name__)
 CORS(app)  
 
 # Defining GPIO pins
-BUTTON_PRESS = 23
 BELT = 26
 BIT1 = 5
 BIT2 = 6
 
 # Initialize GPIO
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(BUTTON_PRESS, GPIO.IN)   # Button
 GPIO.setup(BELT, GPIO.OUT)  # Whether the belt is allowed to move
 GPIO.setup(BIT1, GPIO.OUT)  # Bit 1 of bin
 GPIO.setup(BIT2, GPIO.OUT)  # Bit 2 of bin
+GPIO.setup(23, GPIO.IN)     # Button
 GPIO.setup(17, GPIO.OUT)    # First LED
 GPIO.setup(27, GPIO.OUT)    # Second LED
 GPIO.setup(22, GPIO.OUT)    # Third LED
 
-# Initialize LEDs
+# Initialize LEDs and Button
+BUTTON = Button(23)
 LED1 = LED(17)
 LED2 = LED(27)
 LED3 = LED(22)
