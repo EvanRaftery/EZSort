@@ -73,6 +73,11 @@ getData = {
 }
 
 def gpioLogic(data):
+    if BUTTON.is_pressed:
+        if getData["Train"]:
+            iter += 1
+        else:
+            getData["Train"] = 1
     categories = ["i0", "i1", "i2", "i3", "i4"]
 
     highestClass = data['class']
