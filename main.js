@@ -55,7 +55,7 @@ class Main {
         // Communication with Python
         this.pydataT = 0;           // 0 or 1, determines if we're training or not
         this.pydataR = 0;           // 0 or 1, tells us when to reset/retrain
-        this.maxClass = -1;
+        this.maxClass = -1;         // -1 (no class found) or 0 to NUM_CLASSES
 
         // Initiate deeplearn.js math and knn classifier objects
         this.bindPage();
