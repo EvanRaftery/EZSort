@@ -54,9 +54,8 @@ class Main {
 
         // Communication with Python
         this.pydataT = 0;           // 0 or 1, determines if we're training or not
-        this.pydataC = 0;          // 0 to 5, determines what class we're training
         this.pydataR = 0;           // 0 or 1, tells us when to reset/retrain
-        this.maxClass = "None";
+        this.maxClass = -1;
 
         // Initiate deeplearn.js math and knn classifier objects
         this.bindPage();
@@ -74,8 +73,8 @@ class Main {
             div.style.marginBottom = '10px';
             
             // Train class N if number key N is pressed
-            document.addEventListener('keypress', (event) => {if(event.key === String(i)){this.training = i;}});
-            document.addEventListener('keyup', (event) => {if(event.key === String(i)){this.training = -1;}});
+            // document.addEventListener('keypress', (event) => {if(event.key === String(i)){this.training = i;}});
+            // document.addEventListener('keyup', (event) => {if(event.key === String(i)){this.training = -1;}});
             
             // Create info text
             const infoText = document.createElement('span')
@@ -122,7 +121,7 @@ class Main {
         let thing = await fetch('http://127.0.0.1:5000/');
         let things = await thing.json();
         this.pydataT = things.Train;
-        this.pydataC = things.Clss;
+        this.training = things.Clss;
         this.pydataR = things.Rst;
         return(things);
     }
@@ -162,15 +161,13 @@ class Main {
         });
     }
 
-    logic(){
-        //console.log(this.pydataC);
-        this.training = this.pydataC;
-    }
+    //logic(){
+        // start here
+    //}
 
     async animate() {
         this.recieve();
         // this.logic();      // Only going to remove if we do not need anymore logic.
-        this.training = this.pydataC;
 
         if (this.videoPlaying) {
             // Get image data from video element
@@ -229,7 +226,7 @@ class Main {
                 this.send(this.maxClass,this.knn.getClassExampleCount()[0],this.knn.getClassExampleCount()[1], this.knn.getClassExampleCount()[2], this.knn.getClassExampleCount()[3], this.knn.getClassExampleCount()[4]);
                 console.log(this.maxClass, maxCount); 
             }else{
-                this.send("None",this.knn.getClassExampleCount()[0],this.knn.getClassExampleCount()[1], this.knn.getClassExampleCount()[2], this.knn.getClassExampleCount()[3], this.knn.getClassExampleCount()[4]);
+                this.send(-1,this.knn.getClassExampleCount()[0],this.knn.getClassExampleCount()[1], this.knn.getClassExampleCount()[2], this.knn.getClassExampleCount()[3], this.knn.getClassExampleCount()[4]);
             }
 
             // Dispose image when done

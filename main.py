@@ -52,9 +52,9 @@ def gpioLogic(data):
     categories = ["i0", "i1", "i2", "i3", "i4"]
 
     highestClass = data['class']
-    if highestClass != 'None':
+    if highestClass >= 0:
         print(highestClass)
-        # More logic can go in here
+        # Use highestClass to move shit
 
     # GPIO
     """
@@ -79,7 +79,7 @@ def gpioLogic(data):
     if(getData["Train"]):
         if(getData["Clss"] == -1):
             getData["Clss"] = 0
-        if(getData["Clss"] < 5): 
+        if(getData["Clss"] < 5):
             for cat in categories:
                 # The below line should be split into increments
                 # that only goes off when the button flag is high
