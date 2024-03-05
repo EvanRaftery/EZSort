@@ -36,10 +36,34 @@
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
+import RPi.GPIO as GPIO
+from gpiozero import LED
+import time
 
 # Set up Flask
 app = Flask(__name__)
 CORS(app)  
+
+# Defining GPIO pins
+BUTTON_PRESS = 23
+BELT = 26
+BIT1 = 5
+BIT2 = 6
+
+# Initialize GPIO
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(BUTTON_PRESS, GPIO.IN)   # Button
+GPIO.setup(BELT, GPIO.OUT)  # Whether the belt is allowed to move
+GPIO.setup(BIT1, GPIO.OUT)  # Bit 1 of bin
+GPIO.setup(BIT2, GPIO.OUT)  # Bit 2 of bin
+GPIO.setup(17, GPIO.OUT)    # First LED
+GPIO.setup(27, GPIO.OUT)    # Second LED
+GPIO.setup(22, GPIO.OUT)    # Third LED
+
+# Initialize LEDs
+LED1 = LED(17)
+LED2 = LED(27)
+LED3 = LED(22)
 
 global trainClass
 trainClass = -1
@@ -58,8 +82,18 @@ def gpioLogic(data):
     categories = ["i0", "i1", "i2", "i3", "i4"]
 
     highestClass = data['class']
-    if highestClass >= 0:
+    if highestClass > 0:
         print(highestClass)
+        
+        if highestClass >= 2:
+            GPIO.output(BIT1, 1)
+        else:
+            GPIO.output(BIT1, 0)
+        
+        if highestClass % 2 == 0:
+            GPIO.output(BIT2, 0)
+        else:
+            GPIO.output(BIT2, 1)
         # Use highestClass to move shit
 
     # GPIO
