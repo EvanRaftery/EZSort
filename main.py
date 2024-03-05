@@ -41,6 +41,12 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 CORS(app)  
 
+global trainClass
+trainClass = -1
+
+global iter
+iter = 0
+
 global getData
 getData = {
     "Train": 1,
@@ -76,6 +82,10 @@ def gpioLogic(data):
     Train 0 on just belt
     Then train each category on and off to get different angles
     """
+
+    # Below is the working code
+
+    """
     if(getData["Train"]):
         if(getData["Clss"] == -1):
             getData["Clss"] = 0
@@ -91,6 +101,42 @@ def gpioLogic(data):
         else:
             getData["Train"] = 0
             getData["Clss"] = -1
+    """
+
+        # trainClass represents the class currently being trained
+    
+    # getData["Clss"] tells the JS when and what to train 
+    # (-1 when waiting for button press so trainClass stores 
+    # value for when next iteration of training starts)
+
+    # getData["Train"] is a flag for Python to know when to retrain
+
+    # iter is used for the training iterations
+
+    if(getData["Train"]):
+
+        if(trainClass == -1):
+            trainClass = 0
+        if(trainClass < 5): 
+            for cat in categories:
+                if(int(cat[1]) == trainClass):
+                    if data[cat] >= (iter*10):
+                        getData["Clss"] = -1
+                    else:
+                       getData["Clss"] = trainClass
+
+                # Might need to move this or change conditional
+                if data[cat] >= 50 and int(cat[1]) == getData["Clss"]:
+                    print(cat, " is over 50: ", data[cat])
+                    trainClass += 1
+                    iter = 0
+                    #getData["Clss"] += 1
+        else:
+           getData["Train"] = 0
+           trainClass = -1
+           getData["Clss"] = -1
+
+
 
 # Event handling
 @app.route("/", methods=["GET", "POST"])
