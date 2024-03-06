@@ -17,6 +17,10 @@ const int diri = 5;
 //const int high = 10;
 const int high = 2;
 
+const int BELT;
+const int binval1; // JAKE ASSIGN PINS
+const int binval2;
+
 //const int blink1 = 3;
 //const int blink2 = 4;
 //const int blink3 = 5;
@@ -35,12 +39,16 @@ byte store;
 
 int pos;
 int goPos0;
-int goPos1;
+//int goPos1;
 
 int uidFlag;
 int uidInitFlag;
 
 void setup() {
+  pinmode(BELT, INPUT);
+  pinmode(binval1, INPUT);
+  pinmode(binval2, INPUT);
+
   pinMode(high, OUTPUT);
   digitalWrite(high, HIGH);
   pinMode(onOff, OUTPUT);
@@ -65,7 +73,7 @@ void setup() {
   
   uidInitFlag = 0;
 
-  goPos0 = 3;
+  //goPos0 = 3;
 
   
   
@@ -75,6 +83,19 @@ void loop() {
   /*switch(goPos1){
     case 1: DigitalRead(high){Second switch} 
     }*/
+
+  int binPos1 = digitalRead(binval1);
+  int binPos2 = digitalRead(binval2);
+
+  if(digitalRead(BELT)){
+    goPos0 = binPos2 * 2 + binPos1
+  }/*else{
+    Turn on LEDS accordingly
+  }*/
+
+  /*
+  LED LOGIC
+  */
   
   if(rfid.PICC_IsNewCardPresent()){
     rfid.PICC_ReadCardSerial();
