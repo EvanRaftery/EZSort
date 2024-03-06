@@ -1,25 +1,28 @@
 #include <SPI.h>
 #include <MFRC522.h>
 
-#define SS_PIN 10
-#define RST_PIN 9
+#define SS_PIN 10  //10
+#define RST_PIN 9 //9
 
 MFRC522 rfid(SS_PIN, RST_PIN);
 
 MFRC522::MIFARE_Key key; 
 
-const int onOff = 6;
-const int dir = 7;
+const int onOff = 7;
+const int dir = 6;
+
+
+
 //const int onOffi = 8;
 //const int diri = 9;
-const int onOffi = 4;
 const int diri = 5;
 //const int high = 10;
 const int high = 2;
 
-const int BELT;
-const int binval1; // JAKE ASSIGN PINS
-const int binval2;
+//const int BELT;
+const int onOffi = 4; // BELT
+//const int binval1; // JAKE ASSIGN PINS
+//const int binval2;
 
 //const int blink1 = 3;
 //const int blink2 = 4;
@@ -45,9 +48,9 @@ int uidFlag;
 int uidInitFlag;
 
 void setup() {
-  pinmode(BELT, INPUT);
+  /*pinmode(BELT, INPUT);
   pinmode(binval1, INPUT);
-  pinmode(binval2, INPUT);
+  pinmode(binval2, INPUT);*/
 
   pinMode(high, OUTPUT);
   digitalWrite(high, HIGH);
@@ -73,7 +76,7 @@ void setup() {
   
   uidInitFlag = 0;
 
-  //goPos0 = 3;
+  goPos0 = 3;
 
   
   
@@ -83,13 +86,14 @@ void loop() {
   /*switch(goPos1){
     case 1: DigitalRead(high){Second switch} 
     }*/
+    
 
-  int binPos1 = digitalRead(binval1);
+  /*int binPos1 = digitalRead(binval1);
   int binPos2 = digitalRead(binval2);
 
   if(digitalRead(BELT)){
     goPos0 = binPos2 * 2 + binPos1
-  }/*else{
+  }*//*else{
     Turn on LEDS accordingly
   }*/
 
