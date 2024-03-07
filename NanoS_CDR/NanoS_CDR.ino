@@ -18,12 +18,14 @@ const int high = 2;
 
 
 const int onOffi = A0;//4; // BELT
-const int binval1 = A1; // JAKE ASSIGN PINS
+const int binval1 = A1; // Binary value representing destination bin
 const int binval2 = A2;
 
-/*const int blinkr = D3;
-const int blinky = D4;
-const int blinkg = D5;*/
+const int nanoB = A3; // Output that tells NanoB when to go on
+
+/*const int blinkr = 6; //D3;
+const int blinky = 7;   //D4;
+const int blinkg = 8;   //D5;*/
 
 byte uid[4];
 
@@ -37,6 +39,7 @@ byte store;
 
 int pos;
 int goPos0;
+int prevPos;
 //int goPos1;
 
 int uidFlag;
@@ -50,11 +53,15 @@ void setup() {
   pinMode(sleep, OUTPUT);
   digitalWrite(sleep,HIGH);
   digitalWrite(dir, LOW);
+  
 
   // 3 Pi comm pins
   pinMode(onOffi, INPUT);
   pinMode(binval1, INPUT);
   pinMode(binval2, INPUT);
+
+  // NanoB Control pin
+  pinMode(nanoB, OUTPUT);
 
   
   
@@ -89,11 +96,19 @@ void loop() {
   int binPos2 = digitalRead(binval2);
 
   if(digitalRead(onOffi)){
+    prevPos = goPos0;
     goPos0 = binPos2 * 2 + binPos1;
   }/*else{
     Turn on LEDS accordingly
   }*/
 
+  if(goPos0 != prevPos){
+    digitalWrite(nanoB, HIGH);
+    delay(10); // Vary time
+    digitalWrite(nanoB, LOW);
+  }
+  }
+  
   /*
   LED LOGIC
   */
