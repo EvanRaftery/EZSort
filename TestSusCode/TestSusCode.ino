@@ -1,8 +1,8 @@
 #include <SPI.h>
 #include <MFRC522.h>
 
-#define SS_PIN 10  //10
-#define RST_PIN 9 //9
+#define SS_PIN 10
+#define RST_PIN 9
 
 MFRC522 rfid(SS_PIN, RST_PIN);
 
@@ -10,25 +10,20 @@ MFRC522::MIFARE_Key key;
 
 const int onOff = 7;
 const int dir = 6;
+const int sleep = 8;
 
 
+const int diri = 5; //Legacy I believe. Might beable to delete
+const int high = 2; 
 
-//const int onOffi = 8;
-//const int diri = 9;
-const int diri = 5;
-//const int high = 10;
-const int high = 2;
 
-//const int BELT;
-const int onOffi = 4; // BELT
-//const int binval1; // JAKE ASSIGN PINS
-//const int binval2;
+const int onOffi = A0;//4; // BELT
+const int binval1 = A1; // JAKE ASSIGN PINS
+const int binval2 = A2;
 
-//const int blink1 = 3;
-//const int blink2 = 4;
-//const int blink3 = 5;
-//const int blink2 = 0;
-//const int blink3 = 1;
+/*const int blinkr = D3;
+const int blinky = D4;
+const int blinkg = D5;*/
 
 byte uid[4];
 
@@ -48,17 +43,23 @@ int uidFlag;
 int uidInitFlag;
 
 void setup() {
-  /*pinmode(BELT, INPUT);
-  pinmode(binval1, INPUT);
-  pinmode(binval2, INPUT);*/
-
   pinMode(high, OUTPUT);
   digitalWrite(high, HIGH);
   pinMode(onOff, OUTPUT);
   pinMode(dir, OUTPUT);
+  pinMode(sleep, OUTPUT);
+  digitalWrite(sleep,HIGH);
   digitalWrite(dir, LOW);
+
+  // 3 Pi comm pins
   pinMode(onOffi, INPUT);
+  pinMode(binval1, INPUT);
+  pinMode(binval2, INPUT);
+
+  
+  
   pinMode(diri, INPUT);
+  
   //pinMode(blink1, OUTPUT);
   //pinMode(blink2, OUTPUT);
   //pinMode(blink3, OUTPUT);
@@ -76,7 +77,7 @@ void setup() {
   
   uidInitFlag = 0;
 
-  goPos0 = 3;
+  //goPos0 = 2;
 
   
   
@@ -88,12 +89,16 @@ void loop() {
     }*/
     
 
-  /*int binPos1 = digitalRead(binval1);
+  //int binPos1 = digitalRead(binval1);
+  //int binPos2 = digitalRead(binval2);
+  int binPos1 = digitalRead(binval1);
   int binPos2 = digitalRead(binval2);
+  //Serial.print("onOffi ");
+  //Serial.println(digitalRead(onOffi));
 
-  if(digitalRead(BELT)){
-    goPos0 = binPos2 * 2 + binPos1
-  }*//*else{
+  if(digitalRead(onOffi)){
+    goPos0 = binPos2 * 2 + binPos1;
+  }/*else{
     Turn on LEDS accordingly
   }*/
 
@@ -133,14 +138,14 @@ void loop() {
       Serial.println(uidL_Run[3]);
       Serial.println(" ");
         }
-    Serial.println(value);
+    //Serial.println(value);
     uidInitFlag = 1;
     pos = 0; 
     }
   
-  Serial.print(uid[0]);
+  Serial.print(goPos0);
   Serial.print("  ");
-  Serial.println(uid0);
+  Serial.println(pos);
 
   if(*uid != uidL_Run[pos]){
   for(int j = 0; j < 4; j++){
@@ -154,21 +159,15 @@ void loop() {
     digitalWrite(onOff, LOW);
     delay(1);
   }else{
-    //digitalWrite(dir, HIGH);
-    //if(abs(goPos0 - pos) == 1){
-      // Switch greater than signs if performing wrong
-      //if(goPos0 - pos < 0){
-        //digitalWrite(dir, LOW);
-        //}
-
-      //}
-     //for(int i = 0; i < 50; i++){
      if((pos == 0 && goPos0 == 3) || ((pos - goPos0) == 1)){digitalWrite(dir, HIGH);}
      else{digitalWrite(dir, LOW);}
+        Serial.println(goPos0);
         digitalWrite(onOff,HIGH); 
-        delay(0.1); 
+        delay(0.5); 
+        //delay(1);
         digitalWrite(onOff,LOW); 
-        delay(0.1);
+        //delay(1);
+        delay(0.5);
         //Serial.print("I");
          //}
       //digitalWrite(dir, HIGH);
