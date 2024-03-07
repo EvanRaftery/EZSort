@@ -60,9 +60,9 @@ void setup() {
   
   pinMode(diri, INPUT);
   
-  //pinMode(blink1, OUTPUT);
-  //pinMode(blink2, OUTPUT);
-  //pinMode(blink3, OUTPUT);
+  //pinMode(blinkr, OUTPUT);
+  //pinMode(blinky, OUTPUT);
+  //pinMode(blinkg, OUTPUT);
   Serial.begin(9600);
   SPI.begin(); // Init SPI bus
   rfid.PCD_Init(SS_PIN, RST_PIN);
@@ -83,18 +83,10 @@ void setup() {
   
 }
 
-void loop() {
-  /*switch(goPos1){
-    case 1: DigitalRead(high){Second switch} 
-    }*/
-    
+void loop() {    
 
-  //int binPos1 = digitalRead(binval1);
-  //int binPos2 = digitalRead(binval2);
   int binPos1 = digitalRead(binval1);
   int binPos2 = digitalRead(binval2);
-  //Serial.print("onOffi ");
-  //Serial.println(digitalRead(onOffi));
 
   if(digitalRead(onOffi)){
     goPos0 = binPos2 * 2 + binPos1;
@@ -173,24 +165,4 @@ void loop() {
       //digitalWrite(dir, HIGH);
   }
   
-  /*if (uid[0] == uid0){
-    if(!uidFlag){
-    if(digitalRead(diri) == HIGH){digitalWrite(dir, LOW);} else {digitalWrite(dir, HIGH);}
-    //digitalWrite(onOff,HIGH);  IF DRIFTING UNCOMENT AND PUT INTO LOOP FOR REVERSE
-    //delay(1);
-    //digitalWrite(onOff, LOW);
-    //delay(1);
-    uidFlag = 1;
-    }
-    digitalWrite(onOff, LOW);
-    delay(1);
-    }else{uidFlag = 0;}*/
-
-
-  /*if(uid[0] != uid0){
-    digitalWrite(onOff,HIGH); 
-    delay(1); 
-    digitalWrite(onOff,LOW); 
-    delay(1);
-    } */
 }
