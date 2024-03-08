@@ -1,4 +1,4 @@
-#include <SPI.h>
+ #include <SPI.h>
 #include <MFRC522.h>
 
 #define SS_PIN 10
@@ -45,6 +45,8 @@ int prevPos;
 int uidFlag;
 int uidInitFlag;
 
+int flag;
+
 void setup() {
   pinMode(high, OUTPUT);
   digitalWrite(high, HIGH);
@@ -83,9 +85,10 @@ void setup() {
   uidL_Init[3] = uid3;
   
   uidInitFlag = 0;
+  flag = 1;
 
   //goPos0 = 2;
-
+  digitalWrite(nanoB, LOW);
   
   
 }
@@ -96,22 +99,30 @@ void loop() {
   int binPos2 = digitalRead(binval2);
 
   if(digitalRead(onOffi)){
-    prevPos = goPos0;
+    //prevPos = goPos0;
+    if(goPos0 != (binPos2 * 2 + binPos1)){flag = 1;}
     goPos0 = binPos2 * 2 + binPos1;
   }/*else{
     Turn on LEDS accordingly
   }*/
+  
+  Serial.print(prevPos);
+  Serial.print(" : ");
+  Serial.print(pos);
+  Serial.print(" : ");
+  Serial.println(goPos0);
 
-  if(goPos0 != prevPos){
+  
+  if(pos != prevPos && pos == goPos0 && flag){
+    //Serial.println("FLAG");
     digitalWrite(nanoB, HIGH);
     delay(10); // Vary time
     digitalWrite(nanoB, LOW);
+    flag = 0;
   }
-  }
+  //}
   
-  /*
-  LED LOGIC
-  */
+  /*LED LOGIC*/
   
   if(rfid.PICC_IsNewCardPresent()){
     rfid.PICC_ReadCardSerial();
@@ -144,16 +155,16 @@ void loop() {
       Serial.println(uidL_Run[2]);
       Serial.println(uidL_Run[3]);
       Serial.println(" ");
-        }
+       }
     //Serial.println(value);
     uidInitFlag = 1;
     pos = 0; 
     }
   
-  Serial.print(goPos0);
+  /*Serial.print(goPos0);
   Serial.print("  ");
-  Serial.println(pos);
-
+  Serial.println(pos);*/
+  prevPos = pos;
   if(*uid != uidL_Run[pos]){
   for(int j = 0; j < 4; j++){
     if(uidL_Run[j] == *uid){
