@@ -59,7 +59,7 @@ void loop() {
   }
   if(store){//digitalRead(onOffi) == HIGH){
     Serial.println("FLAG");
-    for(int i = 0; i < 500; i++){
+    for(int i = 0; i < 600; i++){
       digitalWrite(onOff,HIGH); 
       delay(2); 
       digitalWrite(onOff,LOW); 

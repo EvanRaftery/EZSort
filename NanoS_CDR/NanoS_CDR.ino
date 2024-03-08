@@ -94,7 +94,7 @@ void setup() {
 }
 
 void loop() {    
-
+  digitalWrite(nanoB, LOW);
   int binPos1 = digitalRead(binval1);
   int binPos2 = digitalRead(binval2);
 
@@ -116,15 +116,15 @@ void loop() {
     }
   }
   
-  Serial.print(prevPos);
+  /*Serial.print(prevPos);
   Serial.print(" : ");
   Serial.print(pos);
   Serial.print(" : ");
-  Serial.println(goPos0);
+  Serial.println(goPos0);*/
 
   
   if(pos != prevPos && pos == goPos0 && flag){
-    //Serial.println("FLAG");
+    Serial.println("FLAG IN CONDITIONAL");
     digitalWrite(nanoB, HIGH);
     delay(10); // Vary time
     digitalWrite(nanoB, LOW);
@@ -189,7 +189,7 @@ void loop() {
   }else{
      if((pos == 0 && goPos0 == 3) || ((pos - goPos0) == 1)){digitalWrite(dir, HIGH);}
      else{digitalWrite(dir, LOW);}
-        Serial.println(goPos0);
+        //Serial.println(goPos0);
         digitalWrite(onOff,HIGH); 
         delay(0.5); 
         //delay(1);
