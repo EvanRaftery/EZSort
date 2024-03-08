@@ -98,7 +98,7 @@ void loop() {
   int binPos1 = digitalRead(binval1);
   int binPos2 = digitalRead(binval2);
 
-  if(digitalRead(onOffi)){
+  if(!(digitalRead(onOffi))){
     //prevPos = goPos0;
     if(goPos0 != (binPos2 * 2 + binPos1)){flag = 1;}
     goPos0 = binPos2 * 2 + binPos1;
