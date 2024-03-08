@@ -13,7 +13,7 @@ const int dir = 6;
 const int sleep = 8;
 
 
-const int diri = 5; //Legacy I believe. Might beable to delete
+//const int diri = 5; //Legacy I believe. Might beable to delete
 const int high = 2; 
 
 
@@ -23,9 +23,9 @@ const int binval2 = A2;
 
 const int nanoB = A3; // Output that tells NanoB when to go on
 
-/*const int blinkr = 6; //D3;
-const int blinky = 7;   //D4;
-const int blinkg = 8;   //D5;*/
+const int blinkr = 3; //D3;
+const int blinky = 4;   //D4;
+const int blinkg = 5;   //D5;
 
 byte uid[4];
 
@@ -67,11 +67,11 @@ void setup() {
 
   
   
-  pinMode(diri, INPUT);
+  //******************************pinMode(diri, INPUT);
   
-  //pinMode(blinkr, OUTPUT);
-  //pinMode(blinky, OUTPUT);
-  //pinMode(blinkg, OUTPUT);
+  pinMode(blinkr, OUTPUT);
+  pinMode(blinky, OUTPUT);
+  pinMode(blinkg, OUTPUT);
   Serial.begin(9600);
   SPI.begin(); // Init SPI bus
   rfid.PCD_Init(SS_PIN, RST_PIN);
@@ -102,9 +102,19 @@ void loop() {
     //prevPos = goPos0;
     if(goPos0 != (binPos2 * 2 + binPos1)){flag = 1;}
     goPos0 = binPos2 * 2 + binPos1;
-  }/*else{
-    Turn on LEDS accordingly
-  }*/
+  }else{
+    //Turn on LEDS accordingly
+    if(binPos1){
+      digitalWrite(blinkr, HIGH);
+    }else{
+      digitalWrite(blinkr, LOW);
+    }
+    if(binPos2){
+      digitalWrite(blinkg, HIGH);
+    }else{
+      digitalWrite(blinkg, LOW);
+    }
+  }
   
   Serial.print(prevPos);
   Serial.print(" : ");
