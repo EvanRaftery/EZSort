@@ -105,14 +105,14 @@ void loop() {
   }else{
     //Turn on LEDS accordingly
     if(binPos1){
-      digitalWrite(blinkr, HIGH);
-    }else{
-      digitalWrite(blinkr, LOW);
-    }
-    if(binPos2){
       digitalWrite(blinkg, HIGH);
     }else{
       digitalWrite(blinkg, LOW);
+    }
+    if(binPos2){
+      digitalWrite(blinkr, HIGH);
+    }else{
+      digitalWrite(blinkr, LOW);
     }
   }
   
