@@ -8,4 +8,6 @@
 
 Welcome! This repository is the main documentation of our work for ECE415 and ECE416. Our senior design project is EZSort, a modular item sorter that makes use of computer vision and neural networks to classify items. This README file will give a brief overview on what resources were used, how the files function, and how to run the code as a whole.
 
+The JavaScript portion of this code was adapted from the Teachable Machine Boilerplate GitHub repository, which can be found at https://github.com/googlecreativelab/teachable-machine-boilerplate/tree/master/dist.
+
 This document will be further written upon the completion of CDR, as there are still a few changes and adjustments to be made.
