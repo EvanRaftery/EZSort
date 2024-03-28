@@ -17,10 +17,10 @@ Our full documentation with all hardware implementations are detailed in the rep
 ## Files
 A quick overview of each of the files in this repository and what their purpose is:
 
-- `main.js`: Runs all components of image processing and adds images to the KNN training set when training. Transmits data using JSON to main2.py about the current state of training, the most likely class, etc. Can be run as a webpage.
+- `main.js` Runs all components of image processing and adds images to the KNN training set when training. Transmits data using JSON to main2.py about the current state of training, the most likely class, etc. Can be run as a webpage.
 
-- `main2.py`: Handles all GPIO for motor control, receives JSON output from main.js. Runs Flask server for communication with main.js. Handles logic for training and resetting the model.
+- `main2.py` Handles all GPIO for motor control, receives JSON output from main.js. Runs Flask server for communication with main.js. Handles logic for training and resetting the model.
 
-- `NanoB.ino`: Motor control for the conveyor/staging area.
+- `NanoB.ino` Motor control for the conveyor/staging area.
 
-- `NanoS.ino`: Motor control for the lazy susan.
+- `NanoS.ino` Motor control for the lazy susan.
