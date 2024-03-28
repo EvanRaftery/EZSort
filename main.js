@@ -9,36 +9,38 @@
         Evan Raftery
         Jake Shamaly
         Ryan Palmer
-    
+   
     Project Name:
         EZSort
-        
+       
     Advisor:
         Prof. Dennis Goeckel
-        
+       
     Evaluators:
         Prof. Robert Jackson
         Prof. Nikhil Saxena
-        
+       
     This is the image processing and webpage setup code for Team 3's SDP. This file
     first sets up a webpage to display info to the user regarding their model, and
     then lets the user input data to train on. The model makes use of a KNN classifier
     and MobileNet to accurately predict an object's class with minimal training.
 */
 
+
 import "@babel/polyfill";
 import * as mobilenetModule from '@tensorflow-models/mobilenet';        // Our CNN
 import * as tf from '@tensorflow/tfjs';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';     // Our Classifier
 
+
 // Number of classes
-const NUM_CLASSES = 5;
+const NUM_CLASSES = 4;
 // Webcam Image size (Recommended is 227)
 const IMAGE_SIZE = 227;
 // K value for KNN (Number of nearest neighbors to consider)
 const TOPK = 10;
 // Max delay until object detected
-const MAX_COUNT_DELAY = 50;
+const MAX_COUNT_DELAY = 2;
 
 // Variables for object detection
 let prevClass = -1;
@@ -55,7 +57,7 @@ class Main {
         // Communication with Python
         this.pydataT = 0;           // 0 or 1, determines if we're training or not
         this.pydataR = 0;           // 0 or 1, tells us when to reset/retrain
-        this.maxClass = -1;         // -1 (no class found) or 0 to NUM_CLASSES
+        this.maxClass = -1;
 
         // Initiate deeplearn.js math and knn classifier objects
         this.bindPage();
@@ -65,24 +67,23 @@ class Main {
 
         // Show webcam (optional)
         // document.body.appendChild(this.video);
-        
+       
         // Create training buttons and info texts    
         for (let i = 0; i < NUM_CLASSES; i++) {
             const div = document.createElement('div');
             document.body.appendChild(div);
             div.style.marginBottom = '10px';
-            
+           
             // Train class N if number key N is pressed
             // document.addEventListener('keypress', (event) => {if(event.key === String(i)){this.training = i;}});
             // document.addEventListener('keyup', (event) => {if(event.key === String(i)){this.training = -1;}});
-            
+           
             // Create info text
             const infoText = document.createElement('span')
             infoText.innerText = " No examples added";
             div.appendChild(infoText);
             this.infoTexts.push(infoText);
         }
-
 
         // Setup webcam
         navigator.mediaDevices.getUserMedia({ video: true, audio: false })
@@ -99,9 +100,9 @@ class Main {
     async bindPage() {
         this.knn = knnClassifier.create();
         this.mobilenet = await mobilenetModule.load();
-
         this.start();
     }
+
 
     start() {
         if (this.timer) {
@@ -161,14 +162,9 @@ class Main {
         });
     }
 
-    //logic(){
-        // start here
-    //}
-
+    
     async animate() {
         this.recieve();
-        // this.logic();      // Only going to remove if we do not need anymore logic.
-
         if (this.videoPlaying) {
             // Get image data from video element
             const image = tf.fromPixels(this.video);
@@ -187,10 +183,9 @@ class Main {
 
             const numClasses = this.knn.getNumClasses();
             if (numClasses > 0) {
-
                 let max = 0;
                 this.maxClass = "None";
-                let sendClass = 0;
+
                 // If classes have been added run predict
                 logits = infer();
                 const res = await this.knn.predictClass(logits, TOPK);
@@ -214,19 +209,17 @@ class Main {
                     maxCount = 1;
                     prevClass = this.maxClass;
                 }
-                /*if (maxCount > MAX_COUNT_DELAY && maxCount % 25 == 0) {
-                this.send(maxClass,this.knn.getClassExampleCount()[0],this.knn.getClassExampleCount()[1], this.knn.getClassExampleCount()[2], this.knn.getClassExampleCount()[3], this.knn.getClassExampleCount()[4]);
-                console.log(maxClass, maxCount); 
-                }else{
-                this.send("None",this.knn.getClassExampleCount()[0],this.knn.getClassExampleCount()[1], this.knn.getClassExampleCount()[2], this.knn.getClassExampleCount()[3], this.knn.getClassExampleCount()[4]);
-                }*/
             }
-
-            if (maxCount > MAX_COUNT_DELAY && maxCount % 25 == 0) {
+            
+            // Transmit appropriate data from JS to Python using JSON
+            if (maxCount >= MAX_COUNT_DELAY && maxCount % 2 == 0 && this.training == -1) {
                 this.send(this.maxClass,this.knn.getClassExampleCount()[0],this.knn.getClassExampleCount()[1], this.knn.getClassExampleCount()[2], this.knn.getClassExampleCount()[3], this.knn.getClassExampleCount()[4]);
-                console.log(this.maxClass, maxCount); 
+                console.log(this.maxClass, maxCount);
             }else{
                 this.send(-1,this.knn.getClassExampleCount()[0],this.knn.getClassExampleCount()[1], this.knn.getClassExampleCount()[2], this.knn.getClassExampleCount()[3], this.knn.getClassExampleCount()[4]);
+            }
+            if(this.pydataR){window.location.reload();
+                console.log("++++++++++");
             }
 
             // Dispose image when done
@@ -238,6 +231,5 @@ class Main {
         this.timer = requestAnimationFrame(this.animate.bind(this));
     }
 }
-
 
 window.addEventListener('load', () => new Main());
