@@ -77,6 +77,14 @@ prevClass = -2
 global itera
 itera = 0
 
+global N
+N = 4
+
+global M
+M = 16
+
+global waitTime
+waitTime = 5
 
 """
 GPIO
@@ -89,6 +97,9 @@ def gpioLogic(data):
     global trainClass
     global itera
     global prevClass
+    global N
+    global M
+    global waitTime
     categories = ["i0", "i1", "i2", "i3"]
     
     # Button control
@@ -96,25 +107,18 @@ def gpioLogic(data):
         GPIO.output(BIT1, 1)
         GPIO.output(BIT2, 0)
         
-        """if(data["i3"] > 20 and getData["Train"]):
-            getData["Train"] = 0
-        elif(data["i3"] > 20 and not getData["Train"]):
-            getData["Rst"] = 1
-            time.sleep(2)
-        else:
-            getData["Rst"] = 0
-            getData["Train"] = 1"""
-        
-        if getData["Train"] and not (itera*10 > data[categories[trainClass]]):
+        if getData["Train"] and not (itera*N > data[categories[trainClass]]):
             itera += 1
             time.sleep(1)
         elif(not getData["Train"] and not data["i3"]):
             getData["Train"] = 1
             getData["Rst"] = 0
-        elif(not getData["Train"] and data["i3"] > 19): # Reset!
+        elif(not getData["Train"] and data["i3"] > M-1): # Reset!
             getData["Rst"] = 1
             
     # Read highest class and transmit through GPIO for motor control
+    # In decimal, the binary value represented by BIT1 and BIT2 are read like this: 
+    # 2*BIT1 + BIT2
     highestClass = data['class']
     if highestClass > 0 and not getData["Train"]:
         GPIO.output(BELT, 0)       
@@ -139,6 +143,7 @@ def gpioLogic(data):
     Train 0 on just belt
     Then train each category on and off to get different angles
     """
+    """
     if(getData["Train"]):
         GPIO.output(BELT, 1)
         #print(itera)
@@ -154,7 +159,43 @@ def gpioLogic(data):
                     else:
                         getData["Clss"] = trainClass
                 if data[cat] >= 20 and int(cat[1]) == getData["Clss"]:
-                    print(cat, " is over 50: ", data[cat])
+                    #print(cat, " is over 50: ", data[cat])
+                    trainClass += 1
+                    itera = 0
+                    #getData["Clss"] += 1
+        else:
+            getData["Train"] = 0
+            trainClass  = -1
+            getData["Clss"] = -1
+    """
+            
+    if(getData["Train"]):
+        GPIO.output(BELT, 1)
+        #print(itera)
+        if(trainClass == -1):
+            trainClass = 0
+        if(trainClass < 4):
+            for cat in categories:
+                if(int(cat[1]) == trainClass):
+                    if(data[cat] >= (itera*N)):
+                        getData["Clss"] = -1
+                        GPIO.output(BIT1, 0)
+                        GPIO.output(BIT2, 0)
+                        time.sleep(waitTime)
+                        GPIO.output(BIT1, 0)
+                        GPIO.output(BIT2, 1)
+                        time.sleep(waitTime)
+                        GPIO.output(BIT1, 1)
+                        GPIO.output(BIT2, 0)
+                        time.sleep(waitTime)
+                        GPIO.output(BIT1, 1)
+                        GPIO.output(BIT2, 1)
+                        time.sleep(waitTime)
+
+                    else:
+                        getData["Clss"] = trainClass
+                if data[cat] >= M and int(cat[1]) == getData["Clss"]:
+                    #print(cat, " is over 50: ", data[cat])
                     trainClass += 1
                     itera = 0
                     #getData["Clss"] += 1

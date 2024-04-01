@@ -1,4 +1,4 @@
- #include <SPI.h>
+#include <SPI.h>
 #include <MFRC522.h>
 
 #define SS_PIN 10
@@ -98,11 +98,30 @@ void loop() {
   int binPos1 = digitalRead(binval1);
   int binPos2 = digitalRead(binval2);
 
+/* CORRECT/ORIGINAL CRD CODE!!!!!!!!!!!!!!!!!!!!!!!!!
   if(!(digitalRead(onOffi))){
     //prevPos = goPos0;
     if(goPos0 != (binPos2 * 2 + binPos1)){flag = 1;}
     goPos0 = binPos2 * 2 + binPos1;
   }else{
+    //Turn on LEDS accordingly
+    if(binPos1){
+      digitalWrite(blinkg, HIGH);
+    }else{
+      digitalWrite(blinkg, LOW);
+    }
+    if(binPos2){
+      digitalWrite(blinkr, HIGH);
+    }else{
+      digitalWrite(blinkr, LOW);
+    }
+  }
+  */
+
+    if(goPos0 != (binPos2 * 2 + binPos1)){flag = 1;}
+    goPos0 = binPos2 * 2 + binPos1; 
+   if((digitalRead(onOffi))){
+    //prevPos = goPos0;
     //Turn on LEDS accordingly
     if(binPos1){
       digitalWrite(blinkg, HIGH);
