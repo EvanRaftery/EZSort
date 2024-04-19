@@ -191,11 +191,11 @@ void loop() {
      else{digitalWrite(dir, LOW);}
         //Serial.println(goPos0);
         digitalWrite(onOff,HIGH); 
-        delay(0.5); 
-        //delay(1);
+        //delay(0.5); 
+        delay(.1);
         digitalWrite(onOff,LOW); 
-        //delay(1);
-        delay(0.5);
+        delay(.1);
+        //delay(0.5);
         //Serial.print("I");
          //}
       //digitalWrite(dir, HIGH);

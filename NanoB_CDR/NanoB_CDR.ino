@@ -40,14 +40,14 @@ void loop() {
   //Serial.println(store);
   if(diri == 1 && store == HIGH){//if(digitalRead(diri) == HIGH && digitalRead(onOffi) == HIGH){
     //Serial.println("Good Flag");
-    digitalWrite(dir, HIGH);
+    digitalWrite(dir, LOW);
     digitalWrite(blink1, HIGH);
     digitalWrite(blink2, LOW);
     digitalWrite(blink3, LOW);
     }
   else if(diri == 0 && store == HIGH){//digitalRead(onOffi) == HIGH){//else if(digitalRead(diri) == LOW && digitalRead(onOffi) == HIGH){
     //Serial.println("Bad Flag1");
-    digitalWrite(dir, LOW);
+    digitalWrite(dir, HIGH);
     digitalWrite(blink2, HIGH);
     digitalWrite(blink1, LOW);
     digitalWrite(blink3, LOW);
@@ -61,9 +61,9 @@ void loop() {
     Serial.println("FLAG");
     for(int i = 0; i < 600; i++){
       digitalWrite(onOff,HIGH); 
-      delay(2); 
+      delay(1); 
       digitalWrite(onOff,LOW); 
-      delay(2);
+      delay(1);
       }
     } 
 }
