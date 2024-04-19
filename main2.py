@@ -113,7 +113,7 @@ def gpioLogic(data):
         elif(not getData["Train"] and not data["i3"]):
             getData["Train"] = 1
             getData["Rst"] = 0
-        elif(not getData["Train"] and data["i3"] > M-1): # Reset!
+        elif(not getData["Train"] and data["i3"] >= M): # Reset!
             getData["Rst"] = 1
             
     # Read highest class and transmit through GPIO for motor control

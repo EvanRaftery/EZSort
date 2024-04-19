@@ -47,6 +47,9 @@ int uidInitFlag;
 
 int flag;
 
+int oobool;
+int dirbool;
+
 void setup() {
   pinMode(high, OUTPUT);
   digitalWrite(high, HIGH);
@@ -87,6 +90,9 @@ void setup() {
   uidInitFlag = 0;
   flag = 1;
 
+  oobool = 0;
+  dirbool = 0;
+
   //goPos0 = 2;
   digitalWrite(nanoB, LOW);
   
@@ -119,7 +125,10 @@ void loop() {
   */
 
     if(goPos0 != (binPos2 * 2 + binPos1)){flag = 1;}
-    goPos0 = binPos2 * 2 + binPos1; 
+    goPos0 = binPos2 * 2 + binPos1;
+    Serial.print(goPos0);
+    Serial.print(" : ");
+    Serial.println(pos);
    if((digitalRead(onOffi))){
     //prevPos = goPos0;
     //Turn on LEDS accordingly
@@ -203,21 +212,25 @@ void loop() {
   }
 
   if(pos == goPos0){
-    digitalWrite(onOff, LOW);
+    //Serial.println("BLEGH");
+    oobool = 0;
+    digitalWrite(onOff, oobool);
     delay(1);
   }else{
-     if((pos == 0 && goPos0 == 3) || ((pos - goPos0) == 1)){digitalWrite(dir, HIGH);}
-     else{digitalWrite(dir, LOW);}
+     if((pos == 0 && goPos0 == 3) || ((pos - goPos0) == 1)){digitalWrite(dir, HIGH);}else{digitalWrite(dir, LOW);}
         //Serial.println(goPos0);
-        digitalWrite(onOff,HIGH); 
-        delay(0.5); 
-        //delay(1);
-        digitalWrite(onOff,LOW); 
-        //delay(1);
-        delay(0.5);
+        oobool = 1;
+        digitalWrite(onOff,oobool); 
+        //delay(0.1); 
+        delay(15);
+        oobool = 0;
+        digitalWrite(onOff,oobool); 
+        delay(1);
+        //delay(.5);
         //Serial.print("I");
          //}
       //digitalWrite(dir, HIGH);
   }
+
   
 }
