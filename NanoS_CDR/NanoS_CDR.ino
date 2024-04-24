@@ -47,6 +47,12 @@ int uidInitFlag;
 
 int flag;
 
+unsigned long timerSpin1 = 0;
+unsigned long timerSpin2 = 0;
+unsigned long timerCat1 = 0;
+unsigned long timerCat2 = 0;
+unsigned long bDelay = 15000.0;
+
 void setup() {
   pinMode(high, OUTPUT);
   digitalWrite(high, HIGH);
@@ -90,7 +96,6 @@ void setup() {
   //goPos0 = 2;
   digitalWrite(nanoB, LOW);
   
-  
 }
 
 void loop() {    
@@ -128,10 +133,19 @@ void loop() {
     digitalWrite(nanoB, HIGH);
     delay(10); // Vary time
     digitalWrite(nanoB, LOW);
+    timerSpin1 = millis();
     flag = 0;
   }
   //}
-  
+
+   if( (millis() - timerSpin1) > bDelay && (millis() - timerCat1) > bDelay && !(digitalRead(onOffi))){
+    Serial.println("FLAG IN CONDITIONAL");
+    digitalWrite(nanoB, HIGH);
+    delay(10); // Vary time
+    digitalWrite(nanoB, LOW);
+    //flag = 0;
+    timerSpin1 = millis();
+   }
   /*LED LOGIC*/
   
   if(rfid.PICC_IsNewCardPresent()){
@@ -171,9 +185,9 @@ void loop() {
     pos = 0; 
     }
   
-  /*Serial.print(goPos0);
+  Serial.print(goPos0);
   Serial.print("  ");
-  Serial.println(pos);*/
+  Serial.println(pos);
   prevPos = pos;
   if(*uid != uidL_Run[pos]){
   for(int j = 0; j < 4; j++){
@@ -187,15 +201,19 @@ void loop() {
     digitalWrite(onOff, LOW);
     delay(1);
   }else{
-     if((pos == 0 && goPos0 == 3) || ((pos - goPos0) == 1)){digitalWrite(dir, HIGH);}
-     else{digitalWrite(dir, LOW);}
+     timerCat1 = millis();
+     if((pos == 0 && goPos0 == 3) || ((pos - goPos0) == 1)){digitalWrite(dir, HIGH);
+     Serial.println("HIGH");}
+     else{digitalWrite(dir, LOW);
+     Serial.println("LOW");
+     }
         //Serial.println(goPos0);
         digitalWrite(onOff,HIGH); 
         //delay(0.5); 
-        delay(.1);
+        delay(15);
         digitalWrite(onOff,LOW); 
-        delay(.1);
         //delay(0.5);
+        delay(1);
         //Serial.print("I");
          //}
       //digitalWrite(dir, HIGH);
